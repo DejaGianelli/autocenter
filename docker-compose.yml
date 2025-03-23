@@ -1,0 +1,18 @@
+name: autocenter
+services:
+    db:
+        image: 'mysql:8.0.40'
+        environment:
+            MYSQL_ROOT_HOST: "%"
+            MYSQL_ROOT_PASSWORD: "root"
+            MYSQL_USER: "user"
+            MYSQL_PASSWORD: "1234"
+            MYSQL_DATABASE: "autocenter"
+            MYSQL_ALLOW_EMPTY_PASSWORD: 1
+        ports:
+            - "3306:3306"
+        networks:
+            - autocenter-network
+networks:
+    autocenter-network:
+        driver: bridge

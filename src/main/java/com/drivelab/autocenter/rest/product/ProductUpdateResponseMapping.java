@@ -1,0 +1,14 @@
+package com.drivelab.autocenter.rest.product;
+
+import com.drivelab.autocenter.domain.product.Product;
+import org.springframework.stereotype.Component;
+
+@Component
+public class ProductUpdateResponseMapping {
+
+    public ProductUpdateResponseBody responseBody(Product product) {
+        return new ProductUpdateResponseBody(product.publicId().toString(),
+                product.sku().toString(),
+                product.name().toString());
+    }
+}
