@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface VehicleRepository extends JpaRepository<Vehicle, InternalId> {
 
     Optional<Vehicle> findByPlate(Plate plate);
+
+    Optional<Vehicle> findByPublicId(VehiclePublicId publicId);
 }

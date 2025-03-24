@@ -12,6 +12,9 @@ import org.springframework.lang.NonNull;
 public class Vehicle extends DomainEntity {
 
     @Embedded
+    private VehiclePublicId publicId;
+
+    @Embedded
     private Plate plate;
 
     @ManyToOne(optional = false)
@@ -23,6 +26,7 @@ public class Vehicle extends DomainEntity {
     }
 
     public Vehicle(@NonNull Plate plate, @NonNull VehicleModel model) {
+        this.publicId = new VehiclePublicId();
         this.plate = plate;
         this.model = model;
     }
@@ -33,5 +37,9 @@ public class Vehicle extends DomainEntity {
 
     public VehicleModel model() {
         return model;
+    }
+
+    public VehiclePublicId publicId() {
+        return publicId;
     }
 }
