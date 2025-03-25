@@ -1,18 +1,20 @@
 package com.drivelab.autocenter.rest.vehicle;
 
 import com.drivelab.autocenter.domain.EntityNotFoundException;
+import com.drivelab.autocenter.domain.customer.CustomerNotFoundException;
 import com.drivelab.autocenter.domain.vehicle.Vehicle;
 import com.drivelab.autocenter.domain.vehicle.VehicleCreationCommand;
 import com.drivelab.autocenter.domain.vehicle.VehicleCreationUseCase;
 import com.drivelab.autocenter.domain.vehicle.VehicleModelNotFoundException;
 import com.drivelab.autocenter.rest.ProblemDetails;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @RestController
 @RequestMapping("/v1/vehicles")
@@ -41,9 +43,9 @@ public class VehicleCreationRestController {
         return ResponseEntity.created(uri).body(responseBody);
     }
 
-    @ExceptionHandler({VehicleModelNotFoundException.class})
-    public ResponseEntity<ProblemDetails> entityNotFoundResponse(EntityNotFoundException ex) {
+    @ExceptionHandler({VehicleModelNotFoundException.class, CustomerNotFoundException.class})
+    public ResponseEntity<ProblemDetails> notFoundResponse(EntityNotFoundException ex) {
         ProblemDetails problemDetails = new ProblemDetails(ex.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problemDetails);
+        return ResponseEntity.status(BAD_REQUEST).body(problemDetails);
     }
 }
