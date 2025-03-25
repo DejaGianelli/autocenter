@@ -17,3 +17,6 @@ spring:
       hibernate:
         format_sql: true  # Optional, formats SQL queries for readability
     database-platform: org.hibernate.dialect.MySQL8Dialect  # Dialect for MySQL 8
+
+  flyway:
+    locations: "classpath:db/migration,db/testdata"
