@@ -1,14 +1,20 @@
 package com.drivelab.autocenter.rest.vehicle;
 
 import com.drivelab.autocenter.domain.vehicle.Vehicle;
+import com.drivelab.autocenter.rest.vehicle.VehicleDetailsResponseBody.Customer;
+import com.drivelab.autocenter.rest.vehicle.VehicleDetailsResponseBody.Model;
 import org.springframework.stereotype.Component;
 
 @Component
 public class VehicleDetailsResponseMapping {
 
     public VehicleDetailsResponseBody responseBody(Vehicle vehicle) {
-        return new VehicleDetailsResponseBody(vehicle.publicId().toString(),
-                vehicle.plate().toString(),
-                new VehicleDetailsResponseBody.Model(vehicle.model().name().toString()));
+        return VehicleDetailsResponseBody.Builder.builder()
+                .id(vehicle.publicId().toString())
+                .plate(vehicle.plate().toString())
+                .model(new Model(vehicle.model().name().toString()))
+                .customer(new Customer(vehicle.customer().document()))
+                .odometer(vehicle.odometer().value())
+                .build();
     }
 }

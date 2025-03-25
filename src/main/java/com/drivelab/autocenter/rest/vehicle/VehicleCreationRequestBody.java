@@ -4,6 +4,7 @@ public class VehicleCreationRequestBody {
     private String plate;
     private Long modelId;
     private String customerId;
+    private Integer odometer;
 
     public String getCustomerId() {
         return customerId;
@@ -15,5 +16,9 @@ public class VehicleCreationRequestBody {
 
     public Long getModelId() {
         return modelId;
+    }
+
+    public Integer getOdometer() {
+        return odometer;
     }
 }

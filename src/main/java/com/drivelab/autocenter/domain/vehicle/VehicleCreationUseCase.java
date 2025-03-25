@@ -40,7 +40,13 @@ public class VehicleCreationUseCase {
             throw new CustomerNotFoundException(command.customerId());
         }
 
-        Vehicle vehicle = new Vehicle(command.plate(), optionalModel.get(), optionalCustomer.get());
+        Vehicle vehicle = Vehicle.Builder.builder()
+                .plate(command.plate())
+                .model(optionalModel.get())
+                .customer(optionalCustomer.get())
+                .odometer(command.odometer())
+                .build();
+
         vehicle = vehicleRepository.saveAndFlush(vehicle);
 
         return vehicle;
