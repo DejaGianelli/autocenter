@@ -1,5 +1,6 @@
 package com.drivelab.autocenter.domain.inventory;
 
+import com.drivelab.autocenter.domain.DomainException;
 import org.springframework.lang.NonNull;
 
 import java.util.Arrays;
@@ -27,6 +28,6 @@ public enum InventoryMovementType {
         return Arrays.stream(values())
                 .filter(t -> t.id().equals(id))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Invalid inventory movement type id"));
+                .orElseThrow(() -> new DomainException("Invalid inventory movement type id"));
     }
 }
