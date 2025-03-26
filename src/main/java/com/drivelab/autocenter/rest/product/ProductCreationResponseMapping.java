@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 public class ProductCreationResponseMapping {
 
     public ProductCreationResponseBody responseBody(Product product) {
-        return new ProductCreationResponseBody(product.sku().toString(), product.name().toString());
+        return new ProductCreationResponseBody(product.publicId().toString(), product.sku().toString(),
+                product.name().toString());
     }
 }
