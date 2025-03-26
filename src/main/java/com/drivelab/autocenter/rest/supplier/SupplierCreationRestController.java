@@ -36,7 +36,7 @@ public class SupplierCreationRestController {
         SupplierCreationCommand command = requestMapping.command(requestBody);
         Supplier supplier = useCase.newSupplier(command);
         SupplierCreationResponseBody responseBody = responseMapping.responseBody(supplier);
-        URI uri = uriComponentsBuilder.path("/{id}").buildAndExpand(supplier.publicId().toString()).toUri();
+        URI uri = uriComponentsBuilder.path("/v1/suppliers/{id}").buildAndExpand(supplier.publicId().toString()).toUri();
         return ResponseEntity.created(uri).body(responseBody);
     }
 }
