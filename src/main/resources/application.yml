@@ -19,5 +19,5 @@ spring:
     database-platform: org.hibernate.dialect.MySQL8Dialect  # Dialect for MySQL 8
 
   flyway:
-    #locations: "classpath:db/migration,db/testdata"
-    locations: "classpath:db/migration"
+    locations: "classpath:db/migration,db/testdata"
+    #locations: "classpath:db/migration"

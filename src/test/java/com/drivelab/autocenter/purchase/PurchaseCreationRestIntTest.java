@@ -1,6 +1,14 @@
-package com.drivelab.autocenter.product;
+package com.drivelab.autocenter.purchase;
 
-import com.drivelab.autocenter.domain.product.*;
+import com.drivelab.autocenter.domain.Cnpj;
+import com.drivelab.autocenter.domain.purchase.PurchaseCreationCommand;
+import com.drivelab.autocenter.domain.supplier.Supplier;
+import com.drivelab.autocenter.domain.supplier.SupplierCreationCommand;
+import com.drivelab.autocenter.domain.supplier.SupplierCreationUseCase;
+import com.drivelab.autocenter.domain.supplier.SupplierName;
+import com.drivelab.autocenter.mockbuilders.PurchaseCreationRequestBodyMb;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +27,7 @@ import org.testcontainers.utility.DockerImageName;
 @ActiveProfiles("test")
 @Testcontainers
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class ProductDetailsRestIntTest {
+class PurchaseCreationRestIntTest {
 
     @Container
     static MySQLContainer<?> mysql = new MySQLContainer<>(DockerImageName.parse("mysql:8.0.40"));
@@ -30,7 +38,10 @@ class ProductDetailsRestIntTest {
     WebTestClient client;
 
     @Autowired
-    ProductCreationUseCase useCase;
+    ObjectMapper objectMapper;
+
+    @Autowired
+    SupplierCreationUseCase useCase;
 
     @BeforeEach
     void setUp() {
@@ -45,26 +56,31 @@ class ProductDetailsRestIntTest {
     }
 
     @Test
-    void create_product_successfully() {
-        
-        var sku = "AGK94585-Yellow";
-        var name = "Produto Teste";
+    void create_purchase_successfully() throws JsonProcessingException {
 
-        Product product = useCase.newProduct(ProductCreationCommand.Builder.builder()
-                .name(new ProductName(name))
-                .sku(new Sku(sku))
+        Supplier supplier = useCase.newSupplier(SupplierCreationCommand.Builder.builder()
+                .cnpj(new Cnpj("02744280000178"))
+                .supplierName(new SupplierName("Some Company Limited"))
                 .build());
 
-        client.get().uri("/v1/products/{id}", product.publicId().toString())
+        var requestBody = new PurchaseCreationRequestBodyMb()
+                .defaultRequest()
+                .setSupplierId(supplier.publicId().toString());
+        var json = objectMapper.writeValueAsString(requestBody);
+
+        client.post().uri("/v1/purchases")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(json)
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus()
-                .isOk()
+                .isCreated()
                 .expectHeader()
                 .contentType(MediaType.APPLICATION_JSON)
                 .expectBody()
-                .jsonPath("$.id").isEqualTo(product.publicId().toString())
-                .jsonPath("$.sku").isEqualTo(sku)
-                .jsonPath("$.name").isEqualTo(name);
+                .jsonPath("$.id").isNotEmpty()
+                .jsonPath("$.total").isEqualTo(0.00)
+                .jsonPath("$.supplier.id").isEqualTo(requestBody.getSupplierId())
+                .jsonPath("$.supplier.name").isEqualTo(supplier.name().toString());
     }
 }

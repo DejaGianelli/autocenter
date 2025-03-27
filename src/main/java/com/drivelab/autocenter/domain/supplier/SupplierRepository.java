@@ -11,4 +11,6 @@ import java.util.Optional;
 public interface SupplierRepository extends JpaRepository<Supplier, InternalId> {
 
     Optional<Supplier> findByCnpj(Cnpj cnpj);
+
+    Optional<Supplier> findByPublicId(SupplierPublicId publicId);
 }
