@@ -2,7 +2,6 @@ package com.drivelab.autocenter.rest.purchase;
 
 public class PurchasePutItemRequestBody {
 
-    private String productId;
     private Integer quantity;
     private Integer unitCost;
 
@@ -12,14 +11,6 @@ public class PurchasePutItemRequestBody {
 
     public void setUnitCost(Integer unitCost) {
         this.unitCost = unitCost;
-    }
-
-    public String getProductId() {
-        return productId;
-    }
-
-    public void setProductId(String productId) {
-        this.productId = productId;
     }
 
     public Integer getQuantity() {

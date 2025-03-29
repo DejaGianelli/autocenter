@@ -18,8 +18,8 @@ public class PurchaseItem {
     private final PurchaseItemId id;
 
     @MapsId("purchaseId")
-    @JoinColumn(name = "purchase_id")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "purchase_id")
     private Purchase purchase;
 
     @Fetch(FetchMode.JOIN)
@@ -53,9 +53,13 @@ public class PurchaseItem {
         this.unitCost = item.unitCost;
     }
 
-    public void setPurchase(Purchase purchase) {
+    public void setPurchase(@NonNull Purchase purchase) {
         this.purchase = purchase;
         this.id.setPurchaseId(purchase.internalId().value());
+    }
+
+    public Purchase purchase() {
+        return purchase;
     }
 
     public Product product() {

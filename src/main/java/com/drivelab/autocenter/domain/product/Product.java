@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.NaturalId;
 import org.springframework.lang.NonNull;
 
+import java.util.Objects;
+
 @AttributeOverrides({
         @AttributeOverride(name = "sku.value", column = @Column(name = "sku")),
         @AttributeOverride(name = "name.value", column = @Column(name = "name"))
@@ -48,5 +50,17 @@ public class Product extends DomainEntity {
 
     public PublicId publicId() {
         return publicId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return Objects.equals(publicId, product.publicId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(publicId);
     }
 }

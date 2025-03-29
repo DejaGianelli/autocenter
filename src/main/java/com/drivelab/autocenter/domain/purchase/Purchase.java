@@ -3,6 +3,7 @@ package com.drivelab.autocenter.domain.purchase;
 import com.drivelab.autocenter.domain.DomainEntity;
 import com.drivelab.autocenter.domain.Money;
 import com.drivelab.autocenter.domain.MoneyAttributeConverter;
+import com.drivelab.autocenter.domain.product.Product;
 import com.drivelab.autocenter.domain.supplier.Supplier;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
@@ -61,6 +62,16 @@ public class Purchase extends DomainEntity {
         }
         items.add(item);
         updateTotal();
+    }
+
+    public void removeItem(Product product) {
+        for (PurchaseItem item : items) {
+            if (item.product().equals(product)) {
+                items.remove(item);
+                updateTotal();
+                return;
+            }
+        }
     }
 
     private void updateTotal() {

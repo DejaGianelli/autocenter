@@ -2,6 +2,8 @@ package com.drivelab.autocenter.domain.purchase;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -18,12 +20,16 @@ public class PurchaseItemId implements Serializable {
     protected PurchaseItemId() {
     }
 
-    public PurchaseItemId(Long productId) {
+    public PurchaseItemId(@NonNull Long productId) {
         this.productId = productId;
     }
 
-    public void setPurchaseId(Long purchaseId) {
+    public void setPurchaseId(@Nullable Long purchaseId) {
         this.purchaseId = purchaseId;
+    }
+
+    public void setProductId(@Nullable Long productId) {
+        this.productId = productId;
     }
 
     @Override
