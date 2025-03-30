@@ -48,7 +48,7 @@ public class Product extends DomainEntity {
         return name;
     }
 
-    public PublicId publicId() {
+    public ProductPublicId publicId() {
         return publicId;
     }
 

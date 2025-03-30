@@ -4,13 +4,19 @@ import com.drivelab.autocenter.domain.DomainEntity;
 import com.drivelab.autocenter.domain.Money;
 import com.drivelab.autocenter.domain.MoneyAttributeConverter;
 import com.drivelab.autocenter.domain.product.Product;
+import com.drivelab.autocenter.domain.product.ProductPublicId;
 import com.drivelab.autocenter.domain.supplier.Supplier;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Entity
@@ -22,6 +28,12 @@ public class Purchase extends DomainEntity {
 
     @Convert(converter = PurchaseStatusAttributeConverter.class)
     private PurchaseStatus status;
+
+    @Column(name = "billed_at_utc")
+    private OffsetDateTime billedAtUtc;
+
+    @Column(name = "received_at_utc")
+    private OffsetDateTime receivedAtUtc;
 
     @Convert(converter = MoneyAttributeConverter.class)
     private Money total;
@@ -53,6 +65,18 @@ public class Purchase extends DomainEntity {
 
     public void markAsBilled() {
         this.status = PurchaseStatus.BILLED;
+        this.billedAtUtc = Instant.now().atOffset(ZoneOffset.UTC);
+    }
+
+    public void markAsReceived() {
+        this.status = PurchaseStatus.RECEIVED;
+        this.receivedAtUtc = Instant.now().atOffset(ZoneOffset.UTC);
+    }
+
+    public Optional<PurchaseItem> item(@NonNull ProductPublicId id) {
+        return items.stream()
+                .filter(i -> i.product().publicId().equals(id))
+                .findFirst();
     }
 
     public void addItem(@NonNull PurchaseItem item) {
@@ -76,6 +100,14 @@ public class Purchase extends DomainEntity {
                 return;
             }
         }
+    }
+
+    public Money totalItemsReceivedCost() {
+        int total = 0;
+        for (PurchaseItem item : items) {
+            total += item.totalReceived().cents();
+        }
+        return Money.create(total);
     }
 
     public Money totalItemsCost() {
@@ -108,5 +140,13 @@ public class Purchase extends DomainEntity {
 
     public Set<PurchaseItem> items() {
         return items;
+    }
+
+    public @Nullable OffsetDateTime billedAtUtc() {
+        return billedAtUtc;
+    }
+
+    public @Nullable OffsetDateTime receivedAtUtc() {
+        return receivedAtUtc;
     }
 }

@@ -5,6 +5,7 @@ CREATE TABLE accounts_payable (
     amount INT NOT NULL DEFAULT 0,
     due_date DATE NOT NULL,
     paid_at_utc TIMESTAMP NULL,
+    payment_method ENUM("cash", "credit_card", "debit_card", "check", "pix") NULL,
     origin_id VARCHAR(36) NOT NULL,
     origin_type ENUM("purchase") NOT NULL,
     created_at_utc TIMESTAMP DEFAULT CURRENT_TIMESTAMP

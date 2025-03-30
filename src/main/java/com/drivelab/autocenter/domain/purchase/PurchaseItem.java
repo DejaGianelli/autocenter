@@ -30,17 +30,21 @@ public class PurchaseItem {
 
     private Integer quantity;
 
+    private Integer receivedQuantity;
+
     @Convert(converter = MoneyAttributeConverter.class)
     private Money unitCost;
 
     protected PurchaseItem() {
         this.id = new PurchaseItemId();
+        this.receivedQuantity = 0;
     }
 
     public PurchaseItem(@NonNull Product product, @NonNull Integer quantity, @NonNull Money unitCost) {
         this.product = product;
         this.quantity = quantity;
         this.unitCost = unitCost;
+        this.receivedQuantity = 0;
         this.id = new PurchaseItemId(product.internalId().value());
     }
 
@@ -48,9 +52,17 @@ public class PurchaseItem {
         return Money.create(unitCost.cents() * quantity);
     }
 
+    public Money totalReceived() {
+        return Money.create(unitCost.cents() * receivedQuantity);
+    }
+
     public void update(@NonNull PurchaseItem item) {
         this.quantity = item.quantity;
         this.unitCost = item.unitCost;
+    }
+
+    public void receive(@NonNull Integer quantity) {
+        this.receivedQuantity = quantity;
     }
 
     public void setPurchase(@NonNull Purchase purchase) {
@@ -76,6 +88,10 @@ public class PurchaseItem {
 
     public PurchaseItemId id() {
         return id;
+    }
+
+    public Integer receivedQuantity() {
+        return receivedQuantity;
     }
 
     @Override

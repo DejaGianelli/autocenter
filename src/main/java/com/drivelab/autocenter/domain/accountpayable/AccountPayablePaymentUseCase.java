@@ -28,23 +28,27 @@ public class AccountPayablePaymentUseCase {
         this.financialAccountRepository = financialAccountRepository;
     }
 
-    public AccountPayable paid(@NonNull AccountPayablePublicId id) {
-        Optional<AccountPayable> optional = accountPayableRepository.findByPublicIdLocked(id);
+    public AccountPayable paid(@NonNull AccountPayablePaymentCommand command) {
+        Optional<AccountPayable> optional = accountPayableRepository.findByPublicIdLocked(command.publicId());
         if (optional.isEmpty()) {
-            throw new AccountPayableNotFoundException(id);
+            throw new AccountPayableNotFoundException(command.publicId());
         }
         AccountPayable payable = optional.get();
-        payable.pay();
+        payable.pay(command.paymentMethod());
         payable = accountPayableRepository.save(payable);
 
-        FinancialAccountCategory category = new FinancialAccountCategory("1.1.5");
-        financialAccountRepository.findByCategory(category)
-                .orElseThrow(() -> new FinancialAccountNotFoundException(category));
+        FinancialAccountCategory category211 = new FinancialAccountCategory("2.1.1");
+        financialAccountRepository.findByCategory(category211)
+                .orElseThrow(() -> new FinancialAccountNotFoundException(category211));
 
-        AccountingDebitEntry debitEntry = new AccountingDebitEntry(payable.amount(), category);
+        AccountingDebitEntry debitEntry = new AccountingDebitEntry(payable.amount(), category211);
         accountingEntryRepository.save(debitEntry);
 
-        AccountingCreditEntry creditEntry = new AccountingCreditEntry(payable.amount(), category);
+        FinancialAccountCategory category111 = new FinancialAccountCategory("1.1.1");
+        financialAccountRepository.findByCategory(category111)
+                .orElseThrow(() -> new FinancialAccountNotFoundException(category111));
+
+        AccountingCreditEntry creditEntry = new AccountingCreditEntry(payable.amount(), category111);
         accountingEntryRepository.save(creditEntry);
 
         return payable;

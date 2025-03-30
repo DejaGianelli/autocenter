@@ -3,7 +3,10 @@ package com.drivelab.autocenter.domain.accountpayable;
 import com.drivelab.autocenter.domain.DomainEntity;
 import com.drivelab.autocenter.domain.Money;
 import com.drivelab.autocenter.domain.MoneyAttributeConverter;
+import com.drivelab.autocenter.domain.PaymentMethod;
 import jakarta.persistence.*;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -32,6 +35,9 @@ public class AccountPayable extends DomainEntity {
     @Column(name = "paid_at_utc")
     private OffsetDateTime paidAt;
 
+    @Column(name = "payment_method")
+    private PaymentMethod paymentMethod;
+
     @Embedded
     private PayableOrigin origin;
 
@@ -48,9 +54,11 @@ public class AccountPayable extends DomainEntity {
         amount = builder.amount;
         dueDate = builder.dueDate;
         origin = builder.origin;
+        paymentMethod = builder.paymentMethod;
     }
 
-    public void pay() {
+    public void pay(@NonNull PaymentMethod paymentMethod) {
+        this.paymentMethod = paymentMethod;
         this.status = AccountsPayableStatus.PAID;
         this.paidAt = Instant.now().atOffset(ZoneOffset.UTC);
     }
@@ -83,6 +91,10 @@ public class AccountPayable extends DomainEntity {
         return createdAt;
     }
 
+    public @Nullable PaymentMethod paymentMethod() {
+        return paymentMethod;
+    }
+
     public static final class Builder {
         private final AccountPayablePublicId publicId;
         private final OffsetDateTime createdAt;
@@ -90,6 +102,7 @@ public class AccountPayable extends DomainEntity {
         private Money amount;
         private LocalDate dueDate;
         private PayableOrigin origin;
+        private PaymentMethod paymentMethod;
 
         private Builder() {
             this.publicId = new AccountPayablePublicId();
@@ -99,6 +112,11 @@ public class AccountPayable extends DomainEntity {
 
         public static Builder builder() {
             return new Builder();
+        }
+
+        public Builder status(PaymentMethod val) {
+            paymentMethod = val;
+            return this;
         }
 
         public Builder status(AccountsPayableStatus val) {

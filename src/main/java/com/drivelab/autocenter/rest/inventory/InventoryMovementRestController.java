@@ -27,7 +27,7 @@ public class InventoryMovementRestController {
     public ResponseEntity<Void> movementResponse(@RequestBody InventoryMovementRequestBody requestBody) {
         try {
             InventoryMovementCommand command = requestMapping.command(requestBody);
-            useCase.newMovement(command);
+            useCase.movement(command);
             return ResponseEntity.ok().build();
         } catch (EntityNotFoundException ex) {
             throw new DomainException(ex);

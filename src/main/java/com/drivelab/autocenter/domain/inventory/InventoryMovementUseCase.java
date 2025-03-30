@@ -25,21 +25,25 @@ public class InventoryMovementUseCase {
         this.inventoryMovementRepository = inventoryMovementRepository;
     }
 
-    public void newMovement(@NonNull InventoryMovementCommand command) {
+    public void movement(@NonNull InventoryMovementCommand command) {
         Optional<Product> optional = productRepository.findByPublicId(command.publicId());
         if (optional.isEmpty()) {
             throw new ProductNotFoundException(command.publicId());
         }
         Product product = optional.get();
+        movement(product, command.type(), command.quantity());
+    }
 
+    public void movement(@NonNull Product product,
+                         @NonNull InventoryMovementType type,
+                         @NonNull InventoryQuantity quantity) {
         Inventory inventory = inventoryRepository.findByProductForUpdate(product)
-                .orElseThrow(() -> new IllegalStateException("Inventory does not exist for product " +
-                        command.publicId()));
+                .orElseThrow(() -> new InventoryForProductNotFoundException(product.publicId()));
 
-        inventory.update(command.type(), command.quantity());
+        inventory.update(type, quantity);
         inventoryRepository.save(inventory);
 
-        InventoryMovement movement = new InventoryMovement(command.type(), command.quantity(), inventory);
+        InventoryMovement movement = new InventoryMovement(type, quantity, inventory);
         inventoryMovementRepository.save(movement);
     }
 }
