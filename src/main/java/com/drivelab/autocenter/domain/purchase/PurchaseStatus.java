@@ -8,7 +8,8 @@ import java.util.Arrays;
 public enum PurchaseStatus {
 
     CREATED("created"),
-    BILLED("billed");
+    BILLED("billed"),
+    RECEIVED("received");
 
     private final String key;
 

@@ -2,6 +2,7 @@ package com.drivelab.autocenter.domain;
 
 import java.text.NumberFormat;
 import java.util.Locale;
+import java.util.Objects;
 
 public class Money {
 
@@ -50,5 +51,17 @@ public class Money {
         var nf = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
         nf.setMinimumFractionDigits(2);
         return nf.format(decimal());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Money money = (Money) o;
+        return amount == money.amount;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(amount);
     }
 }

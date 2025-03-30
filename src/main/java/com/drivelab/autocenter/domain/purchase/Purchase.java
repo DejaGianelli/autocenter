@@ -44,11 +44,15 @@ public class Purchase extends DomainEntity {
     }
 
     public Purchase(@NonNull Supplier supplier) {
+        this();
         this.publicId = new PurchasePublicId();
         this.status = PurchaseStatus.CREATED;
         this.total = Money.ZERO;
         this.supplier = supplier;
-        this.items = new HashSet<>();
+    }
+
+    public void markAsBilled() {
+        this.status = PurchaseStatus.BILLED;
     }
 
     public void addItem(@NonNull PurchaseItem item) {
@@ -74,12 +78,16 @@ public class Purchase extends DomainEntity {
         }
     }
 
-    private void updateTotal() {
+    public Money totalItemsCost() {
         int total = 0;
         for (PurchaseItem item : items) {
             total += item.total().cents();
         }
-        this.total = Money.create(total);
+        return Money.create(total);
+    }
+
+    private void updateTotal() {
+        this.total = totalItemsCost();
     }
 
     public PurchasePublicId publicId() {

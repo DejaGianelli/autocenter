@@ -3,6 +3,6 @@ CREATE TABLE purchases (
     public_id CHAR(26) UNIQUE NOT NULL,
     supplier_id BIGINT NOT NULL,
     total INT NOT NULL DEFAULT 0,
-    status ENUM("created", "billed") NOT NULL,
+    status ENUM("created", "billed", "received") NOT NULL,
     FOREIGN KEY (supplier_id) REFERENCES suppliers(internal_id)
 );
