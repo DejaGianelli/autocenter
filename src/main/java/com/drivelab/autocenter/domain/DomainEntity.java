@@ -11,6 +11,9 @@ public abstract class DomainEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long internalId;
 
+    protected DomainEntity() {
+    }
+
     final public InternalId internalId() {
         return internalId == null ? new NotGeneratedInternalId() : new InternalId(internalId);
     }

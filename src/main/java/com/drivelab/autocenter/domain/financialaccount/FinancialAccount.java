@@ -1,13 +1,14 @@
 package com.drivelab.autocenter.domain.financialaccount;
 
 import com.drivelab.autocenter.domain.DomainEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.NaturalId;
 import org.springframework.lang.NonNull;
 
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Entity
 @Table(name = "financial_accounts")
 public class FinancialAccount extends DomainEntity {

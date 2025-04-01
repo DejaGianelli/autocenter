@@ -35,6 +35,7 @@ public class AccountPayable extends DomainEntity {
     @Column(name = "paid_at_utc")
     private OffsetDateTime paidAt;
 
+    @Convert(converter = PaymentMethodAttributeConverter.class)
     @Column(name = "payment_method")
     private PaymentMethod paymentMethod;
 

@@ -5,6 +5,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import org.springframework.lang.NonNull;
 
+import java.util.Objects;
+
 @Embeddable
 public class FinancialAccountCategory {
 
@@ -22,5 +24,17 @@ public class FinancialAccountCategory {
     @Override
     public String toString() {
         return value;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        FinancialAccountCategory that = (FinancialAccountCategory) o;
+        return Objects.equals(value, that.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(value);
     }
 }

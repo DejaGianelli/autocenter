@@ -1,5 +1,6 @@
 package com.drivelab.autocenter.domain.vehicle;
 
+import org.hibernate.Hibernate;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,9 @@ public class VehicleDetailsUseCase {
         if (optional.isEmpty()) {
             throw new VehicleNotFoundException(publicId);
         }
-        return optional.get();
+        Vehicle vehicle = optional.get();
+        Hibernate.initialize(vehicle.model());
+        Hibernate.initialize(vehicle.customer());
+        return vehicle;
     }
 }

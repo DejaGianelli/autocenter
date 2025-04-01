@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class AccountPayablePaymentRequestMapping {
 
-    public AccountPayablePaymentCommand command(AccountPayablePublicId id, AccountPayablePaymentRequestBody payable) {
-        return new AccountPayablePaymentCommand(PaymentMethod.fromKey(payable.getPaymentMethod()), id);
+    public AccountPayablePaymentCommand command(AccountPayablePublicId id, AccountPayablePaymentRequestBody requestBody) {
+        return new AccountPayablePaymentCommand(PaymentMethod.fromKey(requestBody.getPaymentMethod()), id);
     }
 }

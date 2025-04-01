@@ -1,0 +1,20 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Start App 8080" type="Application" factoryName="Application">
+    <option name="ALTERNATIVE_JRE_PATH" value="17" />
+    <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+    <envs>
+      <env name="SERVER_PORT" value="8080" />
+    </envs>
+    <option name="MAIN_CLASS_NAME" value="com.drivelab.autocenter.AutocenterApplication" />
+    <module name="autocenter" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="com.drivelab.autocenter.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
