@@ -45,6 +45,11 @@ public class PurchaseBillingUseCase {
             throw new PurchaseNotFoundException(command.purchaseId());
         }
         Purchase purchase = purchaseOptional.get();
+
+        if (!purchase.hasItems()) {
+            throw new EmptyPurchaseException(purchase);
+        }
+
         purchase.markAsBilled();
 
         for (Installment installment : command.installments()) {

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/v1/purchases")
+@RequestMapping("/v1/purchases/{purchaseId}/products/{productId}")
 public class PurchaseRemoveItemRestController {
 
     private final PurchaseRemoveItemUseCase useCase;
@@ -29,7 +29,7 @@ public class PurchaseRemoveItemRestController {
         this.responseMapping = responseMapping;
     }
 
-    @DeleteMapping("/{purchaseId}/products/{productId}")
+    @DeleteMapping
     public ResponseEntity<PurchaseRemoveItemResponseBody> response(@PathVariable String purchaseId,
                                                                    @PathVariable String productId) {
         PurchaseRemoveItemCommand command = requestMapping.command(new PurchasePublicId(purchaseId),

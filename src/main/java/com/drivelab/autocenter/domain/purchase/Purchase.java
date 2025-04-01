@@ -1,6 +1,7 @@
 package com.drivelab.autocenter.domain.purchase;
 
 import com.drivelab.autocenter.domain.DomainEntity;
+import com.drivelab.autocenter.domain.DomainException;
 import com.drivelab.autocenter.domain.Money;
 import com.drivelab.autocenter.domain.MoneyAttributeConverter;
 import com.drivelab.autocenter.domain.product.Product;
@@ -18,6 +19,8 @@ import java.time.ZoneOffset;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+
+import static java.util.Objects.isNull;
 
 @Entity
 @Table(name = "purchases")
@@ -63,13 +66,33 @@ public class Purchase extends DomainEntity {
         this.supplier = supplier;
     }
 
+    public boolean allProductsReceived() {
+        boolean received = true;
+        for (PurchaseItem item : items) {
+            if (!item.allReceived()) {
+                return false;
+            }
+        }
+        return received;
+    }
+
+    public boolean hasItems() {
+        return !this.items.isEmpty();
+    }
+
     public void markAsBilled() {
-        this.status = PurchaseStatus.BILLED;
+        updateStatus(PurchaseStatus.BILLED);
+        if (!isNull(this.billedAtUtc)) {
+            throw new DomainException("Purchase of id " + this.publicId + " was already billed");
+        }
         this.billedAtUtc = Instant.now().atOffset(ZoneOffset.UTC);
     }
 
     public void markAsReceived() {
-        this.status = PurchaseStatus.RECEIVED;
+        updateStatus(PurchaseStatus.RECEIVED);
+        if (!isNull(this.receivedAtUtc)) {
+            throw new DomainException("Purchase of id " + this.publicId + " was already received");
+        }
         this.receivedAtUtc = Instant.now().atOffset(ZoneOffset.UTC);
     }
 
@@ -116,6 +139,13 @@ public class Purchase extends DomainEntity {
             total += item.total().cents();
         }
         return Money.create(total);
+    }
+
+    private void updateStatus(@NonNull PurchaseStatus newStatus) {
+        if (!this.status.canChangeTo(newStatus)) {
+            throw new InvalidStatusChangeException(this.status, newStatus);
+        }
+        this.status = newStatus;
     }
 
     private void updateTotal() {

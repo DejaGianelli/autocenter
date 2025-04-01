@@ -19,23 +19,23 @@ public class InventoryQuantity {
     }
 
     public InventoryQuantity incrementedBy(@NonNull InventoryQuantity quantity) {
-        return new InventoryQuantity(this.value + quantity.quantity());
+        return new InventoryQuantity(this.value + quantity.value());
     }
 
     public InventoryQuantity decrementedBy(InventoryQuantity quantity) {
-        int value = this.value - quantity.quantity();
-        if (this.value - quantity.quantity() < 0) {
+        int value = this.value - quantity.value();
+        if (this.value - quantity.value() < 0) {
             throw new IllegalStateException("Inventory quantity cannot be negative");
         }
         return new InventoryQuantity(value);
     }
 
-    public Integer quantity() {
+    public Integer value() {
         return value;
     }
 
     @Override
     public String toString() {
-        return String.valueOf(quantity());
+        return String.valueOf(value());
     }
 }

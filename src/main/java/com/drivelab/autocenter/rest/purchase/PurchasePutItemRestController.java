@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/v1/purchases")
+@RequestMapping("/v1/purchases/{purchaseId}/products/{productId}")
 public class PurchasePutItemRestController {
 
     private final PurchasePutItemUseCase useCase;
@@ -26,7 +26,7 @@ public class PurchasePutItemRestController {
         this.responseMapping = responseMapping;
     }
 
-    @PutMapping("/{purchaseId}/products/{productId}")
+    @PutMapping
     public ResponseEntity<PurchasePutItemResponseBody> response(@PathVariable String purchaseId,
                                                                 @PathVariable String productId,
                                                                 @RequestBody PurchasePutItemRequestBody requestBody) {

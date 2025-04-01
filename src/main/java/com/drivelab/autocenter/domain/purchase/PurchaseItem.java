@@ -1,7 +1,9 @@
 package com.drivelab.autocenter.domain.purchase;
 
+import com.drivelab.autocenter.domain.DomainException;
 import com.drivelab.autocenter.domain.Money;
 import com.drivelab.autocenter.domain.MoneyAttributeConverter;
+import com.drivelab.autocenter.domain.inventory.InventoryQuantity;
 import com.drivelab.autocenter.domain.product.Product;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
@@ -61,8 +63,16 @@ public class PurchaseItem {
         this.unitCost = item.unitCost;
     }
 
-    public void receive(@NonNull Integer quantity) {
-        this.receivedQuantity = quantity;
+    public boolean allReceived() {
+        return Objects.equals(this.quantity, this.receivedQuantity);
+    }
+
+    public void receive(@NonNull InventoryQuantity quantity) {
+        int newQuantity = this.receivedQuantity + quantity.value();
+        if (newQuantity > this.quantity) {
+            throw new DomainException("Received quantity of product " + product.publicId() + " exceeded the purchase");
+        }
+        this.receivedQuantity = newQuantity;
     }
 
     public void setPurchase(@NonNull Purchase purchase) {
