@@ -1,0 +1,6 @@
+CREATE TABLE services (
+    internal_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    public_id CHAR(26) NOT NULL,
+    name VARCHAR(256) NOT NULL,
+    created_at_utc TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
