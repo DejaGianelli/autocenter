@@ -1,16 +1,27 @@
 package com.drivelab.autocenter.domain.inventory;
 
+import com.drivelab.autocenter.domain.Money;
 import com.drivelab.autocenter.domain.product.ProductPublicId;
+import org.springframework.lang.NonNull;
 
 public class InventoryMovementCommand {
-    private final ProductPublicId publicId;
+    private final ProductPublicId productId;
     private final InventoryQuantity quantity;
     private final InventoryMovementType type;
+    private final Money cost;
 
-    public InventoryMovementCommand(ProductPublicId publicId, InventoryQuantity quantity, InventoryMovementType type) {
-        this.publicId = publicId;
+    public InventoryMovementCommand(@NonNull ProductPublicId productId,
+                                    @NonNull InventoryQuantity quantity,
+                                    @NonNull InventoryMovementType type,
+                                    @NonNull Money cost) {
+        this.productId = productId;
         this.quantity = quantity;
         this.type = type;
+        this.cost = cost;
+    }
+
+    public Money cost() {
+        return cost;
     }
 
     public InventoryMovementType type() {
@@ -18,7 +29,7 @@ public class InventoryMovementCommand {
     }
 
     public ProductPublicId publicId() {
-        return publicId;
+        return productId;
     }
 
     public InventoryQuantity quantity() {

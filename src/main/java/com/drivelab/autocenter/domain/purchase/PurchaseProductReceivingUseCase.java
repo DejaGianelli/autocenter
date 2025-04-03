@@ -6,7 +6,7 @@ import com.drivelab.autocenter.domain.accountingentry.AccountingEntryRepository;
 import com.drivelab.autocenter.domain.financialaccount.FinancialAccountCategory;
 import com.drivelab.autocenter.domain.financialaccount.FinancialAccountNotFoundException;
 import com.drivelab.autocenter.domain.financialaccount.FinancialAccountRepository;
-import com.drivelab.autocenter.domain.inventory.InventoryMovementUseCase;
+import com.drivelab.autocenter.domain.inventory.*;
 import com.drivelab.autocenter.domain.product.ProductNotFoundException;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -21,18 +21,21 @@ import static com.drivelab.autocenter.domain.inventory.InventoryMovementType.ENT
 public class PurchaseProductReceivingUseCase {
 
     private final PurchaseRepository purchaseRepository;
-    private final InventoryMovementUseCase inventoryMovement;
     private final FinancialAccountRepository financialAccountRepository;
     private final AccountingEntryRepository accountingEntryRepository;
+    private final InventoryRepository inventoryRepository;
+    private final InventoryMovementRepository inventoryMovementRepository;
 
     public PurchaseProductReceivingUseCase(PurchaseRepository purchaseRepository,
-                                           InventoryMovementUseCase inventoryMovement,
                                            FinancialAccountRepository financialAccountRepository,
-                                           AccountingEntryRepository accountingEntryRepository) {
+                                           AccountingEntryRepository accountingEntryRepository,
+                                           InventoryRepository inventoryRepository,
+                                           InventoryMovementRepository inventoryMovementRepository) {
         this.purchaseRepository = purchaseRepository;
-        this.inventoryMovement = inventoryMovement;
         this.financialAccountRepository = financialAccountRepository;
         this.accountingEntryRepository = accountingEntryRepository;
+        this.inventoryRepository = inventoryRepository;
+        this.inventoryMovementRepository = inventoryMovementRepository;
     }
 
     public void receiveProduct(@NonNull PurchaseProductReceivingCommand command) {
@@ -51,19 +54,29 @@ public class PurchaseProductReceivingUseCase {
             purchase.markAsReceived();
         }
 
-        inventoryMovement.movement(purchaseItem.product(), ENTRY, command.quantity());
+        Inventory inventory = inventoryRepository.findByProductForUpdate(command.productId())
+                .orElseThrow(() -> new InventoryForProductNotFoundException(command.productId()));
+
+        inventory.update(ENTRY, command.quantity());
+        inventoryRepository.save(inventory);
+
+        InventoryMovement movement = new InventoryMovement(ENTRY, command.quantity(), inventory);
+        inventoryMovementRepository.save(movement);
 
         FinancialAccountCategory category115 = new FinancialAccountCategory("1.1.5");
         if (!financialAccountRepository.existsByCategory(category115)) {
             throw new FinancialAccountNotFoundException(category115);
         }
-        AccountingCreditEntry creditEntry = new AccountingCreditEntry(purchaseItem.totalReceived(), category115);
-        accountingEntryRepository.save(creditEntry);
 
         FinancialAccountCategory category113 = new FinancialAccountCategory("1.1.3");
         if (!financialAccountRepository.existsByCategory(category113)) {
             throw new FinancialAccountNotFoundException(category113);
         }
+
+        // TODO: Extract Accounting double-entry logic to a class
+        AccountingCreditEntry creditEntry = new AccountingCreditEntry(purchaseItem.totalReceived(), category115);
+        accountingEntryRepository.save(creditEntry);
+
         AccountingDebitEntry debitEntry = new AccountingDebitEntry(purchaseItem.totalReceived(), category113);
         accountingEntryRepository.save(debitEntry);
 

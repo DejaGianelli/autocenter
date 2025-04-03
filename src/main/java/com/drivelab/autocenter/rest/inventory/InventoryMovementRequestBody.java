@@ -1,12 +1,12 @@
 package com.drivelab.autocenter.rest.inventory;
 
 public class InventoryMovementRequestBody {
-    private String productId;
     private Integer quantity;
     private String type;
+    private Double cost;
 
-    public String getProductId() {
-        return productId;
+    public Double getCost() {
+        return cost;
     }
 
     public Integer getQuantity() {

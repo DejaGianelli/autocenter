@@ -18,7 +18,7 @@ import java.util.Set;
 public class ServiceOrder extends DomainEntity {
 
     @Embedded
-    private ServiceOrderPublicId publicId;
+    private final ServiceOrderPublicId publicId;
 
     @Convert(converter = ServiceOrderStatusAttributeConverter.class)
     private ServiceOrderStatus status;
@@ -42,7 +42,7 @@ public class ServiceOrder extends DomainEntity {
     @Convert(converter = ServiceOrderObservationsAttributeConverter.class)
     private ServiceOrderObservations observations;
 
-    private OffsetDateTime createdAtUtc;
+    private final OffsetDateTime createdAtUtc;
 
     protected ServiceOrder() {
         this.publicId = new ServiceOrderPublicId();
