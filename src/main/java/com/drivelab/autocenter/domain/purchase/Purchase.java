@@ -125,14 +125,6 @@ public class Purchase extends DomainEntity {
         }
     }
 
-    public Money totalItemsReceivedCost() {
-        int total = 0;
-        for (PurchaseItem item : items) {
-            total += item.totalReceived().cents();
-        }
-        return Money.create(total);
-    }
-
     public Money totalItemsCost() {
         int total = 0;
         for (PurchaseItem item : items) {

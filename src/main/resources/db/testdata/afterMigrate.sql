@@ -1,3 +1,7 @@
+-- Services
+
+INSERT INTO services (public_id, name) VALUES ("01JR3SN4NW4HR5JTQZ38AQT31P", "Mao de obra");
+
 -- Vehicle Brands
 
 INSERT INTO vehicle_brands (internal_id, name) VALUES (1, "Peugeot");

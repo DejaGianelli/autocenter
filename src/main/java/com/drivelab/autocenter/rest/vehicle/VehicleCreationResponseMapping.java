@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 public class VehicleCreationResponseMapping {
 
     public VehicleCreationResponseBody responseBody(Vehicle vehicle) {
-        return new VehicleCreationResponseBody(vehicle.plate().toString(), vehicle.model().name().value());
+        return new VehicleCreationResponseBody(vehicle.publicId().toString(),
+                vehicle.plate().toString(), vehicle.model().name().value());
     }
 }

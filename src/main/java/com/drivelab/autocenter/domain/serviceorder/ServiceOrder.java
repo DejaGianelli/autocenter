@@ -1,6 +1,8 @@
 package com.drivelab.autocenter.domain.serviceorder;
 
 import com.drivelab.autocenter.domain.DomainEntity;
+import com.drivelab.autocenter.domain.Money;
+import com.drivelab.autocenter.domain.MoneyAttributeConverter;
 import com.drivelab.autocenter.domain.customer.Customer;
 import com.drivelab.autocenter.domain.vehicle.Odometer;
 import com.drivelab.autocenter.domain.vehicle.Vehicle;
@@ -49,6 +51,9 @@ public class ServiceOrder extends DomainEntity {
     @Convert(converter = ServiceOrderObservationsAttributeConverter.class)
     private ServiceOrderObservations observations;
 
+    @Convert(converter = MoneyAttributeConverter.class)
+    private Money total;
+
     private final OffsetDateTime createdAtUtc;
 
     protected ServiceOrder() {
@@ -56,6 +61,7 @@ public class ServiceOrder extends DomainEntity {
         this.createdAtUtc = Instant.now().atOffset(ZoneOffset.UTC);
         this.status = ServiceOrderStatus.WAITING_START;
         this.services = new HashSet<>();
+        this.total = Money.ZERO;
     }
 
     public ServiceOrder(@NonNull Customer customer, @NonNull Vehicle vehicle, @NonNull Odometer checkInOdometer) {
@@ -71,6 +77,31 @@ public class ServiceOrder extends DomainEntity {
                         @NonNull ServiceOrderObservations observations) {
         this(customer, vehicle, checkInOdometer);
         this.observations = observations;
+    }
+
+    public void addItem(@NonNull ServiceOrderService service) {
+        service.setServiceOrder(this);
+        for (ServiceOrderService s : services) {
+            if (s.equals(service)) {
+                s.update(service);
+                updateTotal();
+                return;
+            }
+        }
+        services.add(service);
+        updateTotal();
+    }
+
+    public Money totalServiceCost() {
+        int total = 0;
+        for (ServiceOrderService service : services) {
+            total += service.price().cents();
+        }
+        return Money.create(total);
+    }
+
+    private void updateTotal() {
+        this.total = totalServiceCost();
     }
 
     public void moveToInProgress() {
@@ -115,5 +146,9 @@ public class ServiceOrder extends DomainEntity {
 
     public Odometer checkInOdometer() {
         return checkInOdometer;
+    }
+
+    public Money total() {
+        return total;
     }
 }

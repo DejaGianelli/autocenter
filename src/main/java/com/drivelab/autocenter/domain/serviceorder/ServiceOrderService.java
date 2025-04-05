@@ -8,12 +8,14 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.springframework.lang.NonNull;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "service_order_services")
 public class ServiceOrderService {
 
     @EmbeddedId
-    private final ServiceOrderServiceId id;
+    private ServiceOrderServiceId id;
 
     @MapsId("serviceOrderId")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -27,23 +29,28 @@ public class ServiceOrderService {
     private Service service;
 
     @Convert(converter = MoneyAttributeConverter.class)
-    private Money cost;
-
-    @Convert(converter = ServiceDescriptionAttributeConverter.class)
-    private ServiceDescription description;
+    private Money price;
 
     protected ServiceOrderService() {
         this.id = new ServiceOrderServiceId();
-        this.cost = Money.ZERO;
+        this.price = Money.ZERO;
     }
 
     public ServiceOrderService(@NonNull Service service,
-                               @NonNull Money cost,
-                               @NonNull ServiceDescription description) {
+                               @NonNull Money price) {
         this();
         this.service = service;
-        this.cost = cost;
-        this.description = description;
+        this.price = price;
+        this.id = new ServiceOrderServiceId(service.internalId().value());
+    }
+
+    public void setServiceOrder(@NonNull ServiceOrder serviceOrder) {
+        this.serviceOrder = serviceOrder;
+        this.id.setServiceOrderId(serviceOrder.internalId().value());
+    }
+
+    public void update(@NonNull ServiceOrderService service) {
+        this.price = service.price;
     }
 
     public ServiceOrderServiceId id() {
@@ -58,12 +65,20 @@ public class ServiceOrderService {
         return service;
     }
 
-    public Money cost() {
-        return cost;
+    public Money price() {
+        return price;
     }
 
-    public ServiceDescription description() {
-        return description;
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        ServiceOrderService service = (ServiceOrderService) o;
+        return Objects.equals(id, service.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }
 
