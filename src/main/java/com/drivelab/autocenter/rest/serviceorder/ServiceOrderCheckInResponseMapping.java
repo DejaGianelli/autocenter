@@ -4,10 +4,10 @@ import com.drivelab.autocenter.domain.serviceorder.ServiceOrder;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ServiceOrderCreationResponseMapping {
+public class ServiceOrderCheckInResponseMapping {
 
-    public ServiceOrderCreationResponseBody responseBody(ServiceOrder serviceOrder) {
-        ServiceOrderCreationResponseBody response = new ServiceOrderCreationResponseBody();
+    public ServiceOrderCheckInResponseBody responseBody(ServiceOrder serviceOrder) {
+        ServiceOrderCheckInResponseBody response = new ServiceOrderCheckInResponseBody();
         if (serviceOrder.observations().isPresent()) {
             response.setDescription(serviceOrder.observations().get().getValue());
         }

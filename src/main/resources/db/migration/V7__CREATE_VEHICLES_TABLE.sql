@@ -4,7 +4,6 @@ CREATE TABLE vehicles (
     model_id BIGINT NOT NULL,
     customer_id BIGINT NOT NULL,
     plate CHAR(7) NOT NULL,
-    odometer_value INT NOT NULL DEFAULT 0,
     FOREIGN KEY (model_id) REFERENCES vehicle_models(internal_id),
     FOREIGN KEY (customer_id) REFERENCES customers(internal_id)
 );

@@ -1,25 +1,29 @@
 package com.drivelab.autocenter.domain.serviceorder;
 
 import com.drivelab.autocenter.domain.customer.CustomerPublicId;
+import com.drivelab.autocenter.domain.vehicle.Odometer;
 import com.drivelab.autocenter.domain.vehicle.VehiclePublicId;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
 import java.util.Optional;
 
-public class ServiceOrderCreationCommand {
+public class ServiceOrderCheckInCommand {
 
     private final CustomerPublicId customerPublicId;
     private final VehiclePublicId vehiclePublicId;
+    private final Odometer odometer;
     private ServiceOrderObservations observations;
 
-    public ServiceOrderCreationCommand(@NonNull CustomerPublicId customerPublicId,
-                                       @NonNull VehiclePublicId vehiclePublicId) {
+    public ServiceOrderCheckInCommand(@NonNull CustomerPublicId customerPublicId,
+                                      @NonNull VehiclePublicId vehiclePublicId,
+                                      @NonNull Odometer odometer) {
         this.customerPublicId = customerPublicId;
         this.vehiclePublicId = vehiclePublicId;
+        this.odometer = odometer;
     }
 
-    public ServiceOrderCreationCommand setObservations(@Nullable ServiceOrderObservations observations) {
+    public ServiceOrderCheckInCommand setObservations(@Nullable ServiceOrderObservations observations) {
         this.observations = observations;
         return this;
     }
@@ -34,5 +38,9 @@ public class ServiceOrderCreationCommand {
 
     public VehiclePublicId vehiclePublicId() {
         return vehiclePublicId;
+    }
+
+    public Odometer odometer() {
+        return odometer;
     }
 }

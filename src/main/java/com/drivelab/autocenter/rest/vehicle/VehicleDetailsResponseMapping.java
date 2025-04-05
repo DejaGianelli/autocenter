@@ -14,7 +14,6 @@ public class VehicleDetailsResponseMapping {
                 .plate(vehicle.plate().toString())
                 .model(new Model(vehicle.model().name().toString()))
                 .customer(new Customer(vehicle.customer().document()))
-                .odometer(vehicle.odometer().value())
                 .build();
     }
 }

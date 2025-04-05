@@ -8,13 +8,11 @@ public class VehicleCreationCommand {
     private Plate plate;
     private InternalId modelId;
     private CustomerPublicId customerId;
-    private Odometer odometer;
 
     private VehicleCreationCommand(Builder builder) {
         plate = builder.plate;
         modelId = builder.modelId;
         customerId = builder.customerId;
-        odometer = builder.odometer;
     }
 
     public Plate plate() {
@@ -29,15 +27,10 @@ public class VehicleCreationCommand {
         return customerId;
     }
 
-    public Odometer odometer() {
-        return odometer;
-    }
-
     public static final class Builder {
         private Plate plate;
         private InternalId modelId;
         private CustomerPublicId customerId;
-        private Odometer odometer;
 
         private Builder() {
         }
@@ -58,11 +51,6 @@ public class VehicleCreationCommand {
 
         public Builder customerId(CustomerPublicId val) {
             customerId = val;
-            return this;
-        }
-
-        public Builder odometer(Odometer val) {
-            odometer = val;
             return this;
         }
 

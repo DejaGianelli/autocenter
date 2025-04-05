@@ -44,7 +44,6 @@ public class VehicleCreationUseCase {
                 .plate(command.plate())
                 .model(optionalModel.get())
                 .customer(optionalCustomer.get())
-                .odometer(command.odometer())
                 .build();
 
         vehicle = vehicleRepository.saveAndFlush(vehicle);

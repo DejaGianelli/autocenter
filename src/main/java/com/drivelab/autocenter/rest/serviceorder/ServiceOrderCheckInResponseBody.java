@@ -2,7 +2,7 @@ package com.drivelab.autocenter.rest.serviceorder;
 
 import java.time.OffsetDateTime;
 
-public class ServiceOrderCreationResponseBody {
+public class ServiceOrderCheckInResponseBody {
 
     private String id;
     private String status;
@@ -13,7 +13,7 @@ public class ServiceOrderCreationResponseBody {
         return id;
     }
 
-    public ServiceOrderCreationResponseBody setId(String id) {
+    public ServiceOrderCheckInResponseBody setId(String id) {
         this.id = id;
         return this;
     }
@@ -22,7 +22,7 @@ public class ServiceOrderCreationResponseBody {
         return status;
     }
 
-    public ServiceOrderCreationResponseBody setStatus(String status) {
+    public ServiceOrderCheckInResponseBody setStatus(String status) {
         this.status = status;
         return this;
     }
@@ -31,7 +31,7 @@ public class ServiceOrderCreationResponseBody {
         return description;
     }
 
-    public ServiceOrderCreationResponseBody setDescription(String description) {
+    public ServiceOrderCheckInResponseBody setDescription(String description) {
         this.description = description;
         return this;
     }
@@ -40,7 +40,7 @@ public class ServiceOrderCreationResponseBody {
         return createdAtUtc;
     }
 
-    public ServiceOrderCreationResponseBody setCreatedAtUtc(OffsetDateTime createdAtUtc) {
+    public ServiceOrderCheckInResponseBody setCreatedAtUtc(OffsetDateTime createdAtUtc) {
         this.createdAtUtc = createdAtUtc;
         return this;
     }

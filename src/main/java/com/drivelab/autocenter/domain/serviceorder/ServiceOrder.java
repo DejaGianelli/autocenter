@@ -2,6 +2,7 @@ package com.drivelab.autocenter.domain.serviceorder;
 
 import com.drivelab.autocenter.domain.DomainEntity;
 import com.drivelab.autocenter.domain.customer.Customer;
+import com.drivelab.autocenter.domain.vehicle.Odometer;
 import com.drivelab.autocenter.domain.vehicle.Vehicle;
 import jakarta.persistence.*;
 import org.springframework.lang.NonNull;
@@ -13,6 +14,9 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+@AttributeOverrides({
+        @AttributeOverride(name = "checkInOdometer.value", column = @Column(name = "checkin_odometer", nullable = false))
+})
 @Entity
 @Table(name = "service_orders")
 public class ServiceOrder extends DomainEntity {
@@ -22,6 +26,9 @@ public class ServiceOrder extends DomainEntity {
 
     @Convert(converter = ServiceOrderStatusAttributeConverter.class)
     private ServiceOrderStatus status;
+
+    @Embedded
+    private Odometer checkInOdometer;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "vehicle_id", nullable = false)
@@ -47,21 +54,31 @@ public class ServiceOrder extends DomainEntity {
     protected ServiceOrder() {
         this.publicId = new ServiceOrderPublicId();
         this.createdAtUtc = Instant.now().atOffset(ZoneOffset.UTC);
-        this.status = ServiceOrderStatus.CREATED;
+        this.status = ServiceOrderStatus.WAITING_START;
         this.services = new HashSet<>();
     }
 
-    public ServiceOrder(@NonNull Customer customer, @NonNull Vehicle vehicle) {
+    public ServiceOrder(@NonNull Customer customer, @NonNull Vehicle vehicle, @NonNull Odometer checkInOdometer) {
         this();
         this.customer = customer;
         this.vehicle = vehicle;
+        this.checkInOdometer = checkInOdometer;
     }
 
     public ServiceOrder(@NonNull Customer customer,
                         @NonNull Vehicle vehicle,
+                        @NonNull Odometer checkInOdometer,
                         @NonNull ServiceOrderObservations observations) {
-        this(customer, vehicle);
+        this(customer, vehicle, checkInOdometer);
         this.observations = observations;
+    }
+
+    public void moveToInProgress() {
+        ServiceOrderStatus to = ServiceOrderStatus.WORK_IN_PROGRESS;
+        if (!this.status.canChangeTo(to)) {
+            throw new ServiceOrderInvalidStatusChangeException(this.status, to);
+        }
+        this.status = to;
     }
 
     public void setObservations(@NonNull ServiceOrderObservations description) {
@@ -94,5 +111,9 @@ public class ServiceOrder extends DomainEntity {
 
     public Set<ServiceOrderService> services() {
         return services;
+    }
+
+    public Odometer checkInOdometer() {
+        return checkInOdometer;
     }
 }

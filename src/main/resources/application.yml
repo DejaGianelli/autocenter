@@ -35,5 +35,5 @@ spring:
         format_sql: true  # Optional, formats SQL queries for readability
 
   flyway:
-    #locations: "classpath:db/migration,db/testdata"
-    locations: "classpath:db/migration"
+    locations: "classpath:db/migration,db/testdata"
+    #locations: "classpath:db/migration"

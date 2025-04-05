@@ -1,16 +1,26 @@
 package com.drivelab.autocenter.rest.serviceorder;
 
-public class ServiceOrderCreationRequestBody {
+public class ServiceOrderCheckInRequestBody {
 
     private String customerId;
     private String vehicleId;
     private String observations;
+    private Integer odometer;
+
+    public Integer getOdometer() {
+        return odometer;
+    }
+
+    public ServiceOrderCheckInRequestBody setOdometer(Integer odometer) {
+        this.odometer = odometer;
+        return this;
+    }
 
     public String getVehicleId() {
         return vehicleId;
     }
 
-    public ServiceOrderCreationRequestBody setVehicleId(String vehicleId) {
+    public ServiceOrderCheckInRequestBody setVehicleId(String vehicleId) {
         this.vehicleId = vehicleId;
         return this;
     }

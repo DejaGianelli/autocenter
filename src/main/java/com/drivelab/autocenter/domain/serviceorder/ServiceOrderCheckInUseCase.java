@@ -14,21 +14,21 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class ServiceOrderCreationUseCase {
+public class ServiceOrderCheckInUseCase {
 
     private final ServiceOrderRepository serviceOrderRepository;
     private final CustomerRepository customerRepository;
     private final VehicleRepository vehicleRepository;
 
-    public ServiceOrderCreationUseCase(ServiceOrderRepository serviceOrderRepository,
-                                       CustomerRepository customerRepository,
-                                       VehicleRepository vehicleRepository) {
+    public ServiceOrderCheckInUseCase(ServiceOrderRepository serviceOrderRepository,
+                                      CustomerRepository customerRepository,
+                                      VehicleRepository vehicleRepository) {
         this.customerRepository = customerRepository;
         this.serviceOrderRepository = serviceOrderRepository;
         this.vehicleRepository = vehicleRepository;
     }
 
-    public ServiceOrder newServiceOrder(@NonNull ServiceOrderCreationCommand command) {
+    public ServiceOrder checkedIn(@NonNull ServiceOrderCheckInCommand command) {
         Optional<Customer> optionalCustomer = customerRepository.findByPublicId(command.customerPublicId());
         if (optionalCustomer.isEmpty()) {
             throw new CustomerNotFoundException(command.customerPublicId());
@@ -41,7 +41,7 @@ public class ServiceOrderCreationUseCase {
         }
         Vehicle vehicle = optionalVehicle.get();
 
-        ServiceOrder serviceOrder = new ServiceOrder(customer, vehicle);
+        ServiceOrder serviceOrder = new ServiceOrder(customer, vehicle, command.odometer());
         if (command.description().isPresent()) {
             serviceOrder.setObservations(command.description().get());
         }

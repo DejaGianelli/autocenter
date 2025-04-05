@@ -143,7 +143,7 @@ public class Purchase extends DomainEntity {
 
     private void updateStatus(@NonNull PurchaseStatus newStatus) {
         if (!this.status.canChangeTo(newStatus)) {
-            throw new InvalidStatusChangeException(this.status, newStatus);
+            throw new PurchaseInvalidStatusChangeException(this.status, newStatus);
         }
         this.status = newStatus;
     }
