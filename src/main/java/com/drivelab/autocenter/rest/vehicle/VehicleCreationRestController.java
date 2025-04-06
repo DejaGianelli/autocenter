@@ -9,7 +9,9 @@ import com.drivelab.autocenter.domain.vehicle.VehicleModelNotFoundException;
 import com.drivelab.autocenter.rest.ProblemDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
@@ -18,7 +20,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @RestController
 @RequestMapping("/v1/vehicles")
-public class VehicleCreationRestController {
+public class VehicleCreationRestController implements VehicleCreationRestApi {
 
     private final VehicleCreationUseCase useCase;
     private final VehicleCreationRequestBodyMapping requestMapping;
@@ -33,13 +35,13 @@ public class VehicleCreationRestController {
         this.responseMapping = responseMapping;
     }
 
-    @PostMapping
-    public ResponseEntity<VehicleCreationResponseBody> createdResponse(@RequestBody VehicleCreationRequestBody requestBody,
-                                                                       UriComponentsBuilder uriComponentsBuilder) {
+    @Override
+    public ResponseEntity<VehicleCreationResponseBody> response(VehicleCreationRequestBody requestBody,
+                                                                UriComponentsBuilder uriComponentsBuilder) {
         VehicleCreationCommand command = requestMapping.command(requestBody);
         Vehicle vehicle = useCase.newVehicle(command);
         VehicleCreationResponseBody responseBody = responseMapping.responseBody(vehicle);
-        URI uri = uriComponentsBuilder.path("/{id}").buildAndExpand(vehicle.internalId().toString()).toUri();
+        URI uri = uriComponentsBuilder.path("/v1/vehicles/{id}").buildAndExpand(vehicle.internalId().toString()).toUri();
         return ResponseEntity.created(uri).body(responseBody);
     }
 

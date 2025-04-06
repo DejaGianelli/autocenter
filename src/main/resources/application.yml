@@ -21,7 +21,7 @@ spring:
             # Entities are not cached unless explicitly marked as cacheable (with the @Cacheable annotation).
             mode: ENABLE_SELECTIVE
       hibernate:
-        generate_statistics: true
+        generate_statistics: false
         cache:
           infinispan:
             # Force using local configuration when only using a single node.
@@ -37,3 +37,6 @@ spring:
   flyway:
     #locations: "classpath:db/migration,db/testdata"
     locations: "classpath:db/migration"
+
+  messages:
+    fallback-to-system-locale: false

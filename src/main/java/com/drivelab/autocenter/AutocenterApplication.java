@@ -8,8 +8,8 @@ import org.springframework.cache.annotation.EnableCaching;
 @SpringBootApplication
 public class AutocenterApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(AutocenterApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(AutocenterApplication.class, args);
+    }
 
 }

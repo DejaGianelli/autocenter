@@ -46,8 +46,6 @@ public class VehicleCreationUseCase {
                 .customer(optionalCustomer.get())
                 .build();
 
-        vehicle = vehicleRepository.saveAndFlush(vehicle);
-
-        return vehicle;
+        return vehicleRepository.saveAndFlush(vehicle);
     }
 }
