@@ -5,8 +5,6 @@ import com.drivelab.autocenter.domain.supplier.SupplierCreationCommand;
 import com.drivelab.autocenter.domain.supplier.SupplierCreationUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -15,7 +13,7 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("/v1/suppliers")
-public class SupplierCreationRestController {
+public class SupplierCreationRestController implements SupplierCreationRestApi {
 
     private final SupplierCreationUseCase useCase;
     private final SupplierCreationRequestBodyMapping requestMapping;
@@ -30,9 +28,9 @@ public class SupplierCreationRestController {
         this.responseMapping = responseMapping;
     }
 
-    @PostMapping
-    public ResponseEntity<SupplierCreationResponseBody> createdResponse(@RequestBody SupplierCreationRequestBody requestBody,
-                                                                        UriComponentsBuilder uriComponentsBuilder) {
+    @Override
+    public ResponseEntity<SupplierCreationResponseBody> response(SupplierCreationRequestBody requestBody,
+                                                                 UriComponentsBuilder uriComponentsBuilder) {
         SupplierCreationCommand command = requestMapping.command(requestBody);
         Supplier supplier = useCase.newSupplier(command);
         SupplierCreationResponseBody responseBody = responseMapping.responseBody(supplier);

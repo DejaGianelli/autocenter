@@ -1,6 +1,7 @@
 package com.drivelab.autocenter.rest;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.lang.Nullable;
 
 import java.time.LocalDateTime;
@@ -55,8 +56,8 @@ public class ProblemDetails {
             return this;
         }
 
-        public @Nullable Object getRejectedValue() {
-            return rejectedValue;
+        public @Nullable String getRejectedValue() {
+            return rejectedValue == null ? null : rejectedValue.toString();
         }
 
         public String getName() {

@@ -6,22 +6,16 @@ public class VehicleDetailsResponseBody {
     private String plate;
     private Model model;
     private Customer customer;
-    private Integer odometer;
 
     private VehicleDetailsResponseBody(Builder builder) {
         id = builder.id;
         plate = builder.plate;
         model = builder.model;
         customer = builder.customer;
-        odometer = builder.odometer;
     }
 
     public Customer getCustomer() {
         return customer;
-    }
-
-    public Integer getOdometer() {
-        return odometer;
     }
 
     public Model getModel() {
@@ -67,7 +61,6 @@ public class VehicleDetailsResponseBody {
         private String plate;
         private Model model;
         private Customer customer;
-        private Integer odometer;
 
         private Builder() {
         }
@@ -93,11 +86,6 @@ public class VehicleDetailsResponseBody {
 
         public Builder customer(Customer val) {
             customer = val;
-            return this;
-        }
-
-        public Builder odometer(Integer val) {
-            odometer = val;
             return this;
         }
 

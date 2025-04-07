@@ -1,4 +1,4 @@
-package com.drivelab.autocenter.rest.vehicle;
+package com.drivelab.autocenter.rest.supplier;
 
 import com.drivelab.autocenter.rest.ProblemDetails;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,15 +12,21 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.util.UriComponentsBuilder;
 
+public interface SupplierCreationRestApi extends SupplierRestApi {
 
-public interface VehicleCreationRestApi extends VehicleRestApi {
-
-    @PostMapping
-    @Operation(summary = "Add new vehicle")
+    @Operation(
+            summary = "Create a new supplier",
+            description = "This endpoint creates a new supplier and returns the created supplier details.",
+            tags = {"Supplier Creation"}
+    )
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "201",
-                    description = "Successful operation"
+                    description = "Supplier created successfully",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = SupplierCreationResponseBody.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "400",
@@ -31,6 +37,7 @@ public interface VehicleCreationRestApi extends VehicleRestApi {
                     )
             )
     })
-    ResponseEntity<VehicleCreationResponseBody> response(@Valid @RequestBody VehicleCreationRequestBody requestBody,
-                                                         UriComponentsBuilder uriComponentsBuilder);
+    @PostMapping
+    ResponseEntity<SupplierCreationResponseBody> response(@Valid @RequestBody SupplierCreationRequestBody requestBody,
+                                                          UriComponentsBuilder uriComponentsBuilder);
 }

@@ -22,7 +22,11 @@ public abstract class PublicId implements Serializable {
     }
 
     public PublicId(@NonNull String value) {
-        this.value = Ulid.from(value);
+        try {
+            this.value = Ulid.from(value);
+        } catch (IllegalArgumentException ex) {
+            throw new DomainException("Malformed id. It must be an ULID", ex);
+        }
     }
 
     @Override
