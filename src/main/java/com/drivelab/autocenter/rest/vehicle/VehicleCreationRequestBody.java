@@ -1,6 +1,7 @@
 package com.drivelab.autocenter.rest.vehicle;
 
 import com.drivelab.autocenter.domain.vehicle.Plate;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 import jakarta.validation.ReportAsSingleViolation;
@@ -17,12 +18,15 @@ import java.lang.annotation.Target;
 public class VehicleCreationRequestBody {
 
     @ValidPlate
+    @Schema(description = "The vehicle's plate number", example = "ABC1234")
     private String plate;
 
     @NotNull(message = "model-id.invalid")
     @Positive(message = "model-id.invalid")
+    @Schema(description = "The vehicle's model id", example = "1")
     private Long modelId;
 
+    @Schema(description = "The customer's id", example = "01JR70WP0023SKHR1YY2YWH27R")
     @NotBlank(message = "customer-id.invalid")
     private String customerId;
 

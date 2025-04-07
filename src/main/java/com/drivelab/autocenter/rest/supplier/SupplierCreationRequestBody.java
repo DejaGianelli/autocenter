@@ -1,6 +1,7 @@
 package com.drivelab.autocenter.rest.supplier;
 
 import com.drivelab.autocenter.domain.supplier.SupplierName;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 import jakarta.validation.ReportAsSingleViolation;
@@ -16,9 +17,11 @@ import java.lang.annotation.Target;
 
 public class SupplierCreationRequestBody {
 
+    @Schema(description = "The supplier's cnpj", example = "22639085000195")
     @CNPJ(message = "supplier.cnpj.invalid")
     private String cnpj;
 
+    @Schema(description = "The supplier's name", example = "Nair e Theo Padaria Ltda")
     @ValidSupplierName
     private String name;
 

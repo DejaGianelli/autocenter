@@ -37,6 +37,7 @@ public interface VehicleDetailsRestApi extends VehicleRestApi {
                     )
             )
     })
-    ResponseEntity<VehicleDetailsResponseBody> response(@Parameter(description = "Vehicle id (ulid)", required = true)
+    ResponseEntity<VehicleDetailsResponseBody> response(@Schema(description = "The vehicle's id", example = "01JR714EW417XNSN7PW7C1HZQS")
+                                                        @Parameter(description = "Vehicle id (ulid)", required = true)
                                                         @PathVariable String id);
 }
