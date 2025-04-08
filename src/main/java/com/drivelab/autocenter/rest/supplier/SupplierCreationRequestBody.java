@@ -17,8 +17,8 @@ import java.lang.annotation.Target;
 
 public class SupplierCreationRequestBody {
 
+    @CNPJ(message = "CNPJ.supplierCreationRequestBody.cnpj")
     @Schema(description = "The supplier's cnpj", example = "22639085000195")
-    @CNPJ(message = "supplier.cnpj.invalid")
     private String cnpj;
 
     @Schema(description = "The supplier's name", example = "Nair e Theo Padaria Ltda")

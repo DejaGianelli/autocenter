@@ -2,6 +2,7 @@ package com.drivelab.autocenter.rest;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.lang.Nullable;
 
 import java.time.LocalDateTime;
@@ -15,10 +16,13 @@ public class ProblemDetails {
 
     private final String message;
 
+    private final int status;
+
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private final List<InvalidParam> invalidParams;
 
-    public ProblemDetails(String message) {
+    public ProblemDetails(String message, HttpStatus status) {
+        this.status = status.value();
         this.timestamp = LocalDateTime.now();
         this.message = message;
         this.invalidParams = new ArrayList<>();
@@ -27,6 +31,10 @@ public class ProblemDetails {
     public ProblemDetails add(InvalidParam invalidParams) {
         this.invalidParams.add(invalidParams);
         return this;
+    }
+
+    public int getStatus() {
+        return status;
     }
 
     public List<InvalidParam> getInvalidParams() {

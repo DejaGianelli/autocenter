@@ -37,7 +37,7 @@ public class PurchaseProductReceivingRestController {
 
     @ExceptionHandler({ProductNotFoundException.class})
     public ResponseEntity<ProblemDetails> notFoundResponse(EntityNotFoundException ex) {
-        ProblemDetails problemDetails = new ProblemDetails(ex.getMessage());
+        ProblemDetails problemDetails = new ProblemDetails(ex.getMessage(), BAD_REQUEST);
         return ResponseEntity.status(BAD_REQUEST).body(problemDetails);
     }
 }
