@@ -16,8 +16,7 @@ public interface SupplierCreationRestApi extends SupplierRestApi {
 
     @Operation(
             summary = "Create a new supplier",
-            description = "This endpoint creates a new supplier and returns the created supplier details.",
-            tags = {"Supplier Creation"}
+            description = "This endpoint creates a new supplier and returns the created supplier details."
     )
     @ApiResponses(value = {
             @ApiResponse(

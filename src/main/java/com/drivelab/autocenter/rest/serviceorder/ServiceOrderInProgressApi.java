@@ -14,8 +14,7 @@ public interface ServiceOrderInProgressApi extends ServiceOrderRestApi {
 
     @Operation(
             summary = "Mark a Service Order as In Progress",
-            description = "Mark a Service Order as In Progress.",
-            tags = {"In Progress"}
+            description = "Mark a Service Order as In Progress."
     )
     @ApiResponses(value = {
             @ApiResponse(

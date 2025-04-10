@@ -16,8 +16,7 @@ public interface ServiceOrderPutServiceRestApi extends ServiceOrderRestApi {
 
     @Operation(
             summary = "Put a service into Service Order",
-            description = "This endpoint puts a service into Service Order and returns the updated Service Order.",
-            tags = {"Supplier Creation"}
+            description = "This endpoint puts a service into Service Order and returns the updated Service Order."
     )
     @ApiResponses(value = {
             @ApiResponse(

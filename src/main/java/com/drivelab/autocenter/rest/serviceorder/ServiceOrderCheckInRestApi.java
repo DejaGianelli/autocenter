@@ -16,8 +16,7 @@ public interface ServiceOrderCheckInRestApi extends ServiceOrderRestApi {
 
     @Operation(
             summary = "Check In a Service Order",
-            description = "The check in is the creation of a new Service Order and returns the created Service Order.",
-            tags = {"Check In"}
+            description = "The check in is the creation of a new Service Order and returns the created Service Order."
     )
     @ApiResponses(value = {
             @ApiResponse(
