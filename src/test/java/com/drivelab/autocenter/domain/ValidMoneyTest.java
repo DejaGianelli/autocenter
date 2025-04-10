@@ -5,7 +5,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class MoneyTest {
+class ValidMoneyTest {
     @ParameterizedTest
     @CsvSource({
             "10.00,1000",

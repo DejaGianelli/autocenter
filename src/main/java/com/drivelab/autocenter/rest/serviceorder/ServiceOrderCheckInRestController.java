@@ -9,7 +9,9 @@ import com.drivelab.autocenter.domain.vehicle.VehicleNotFoundException;
 import com.drivelab.autocenter.rest.ProblemDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
@@ -18,7 +20,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @RestController
 @RequestMapping("/v1/service-orders")
-public class ServiceOrderCheckInRestController {
+public class ServiceOrderCheckInRestController implements ServiceOrderCheckInRestApi {
 
     private final ServiceOrderCheckInUseCase useCase;
     private final ServiceOrderCheckInRequestBodyMapping requestMapping;
@@ -33,8 +35,8 @@ public class ServiceOrderCheckInRestController {
         this.responseMapping = responseMapping;
     }
 
-    @PostMapping
-    public ResponseEntity<ServiceOrderCheckInResponseBody> response(@RequestBody ServiceOrderCheckInRequestBody requestBody,
+    @Override
+    public ResponseEntity<ServiceOrderCheckInResponseBody> response(ServiceOrderCheckInRequestBody requestBody,
                                                                     UriComponentsBuilder uriComponentsBuilder) {
         ServiceOrderCheckInCommand command = requestMapping.command(requestBody);
         ServiceOrder serviceOrder = useCase.checkedIn(command);

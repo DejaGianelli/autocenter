@@ -7,11 +7,12 @@ import com.drivelab.autocenter.domain.serviceorder.ServiceOrderPutServiceCommand
 import com.drivelab.autocenter.domain.serviceorder.ServiceOrderPutServiceUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/v1/service-orders/{serviceOrderId}/services/{serviceId}")
-public class ServiceOrderPutServiceRestController {
+public class ServiceOrderPutServiceRestController implements ServiceOrderPutServiceRestApi {
 
     private final ServiceOrderPutServiceUseCase useCase;
     private final ServiceOrderPutServiceRequestBodyMapping requestMapping;
@@ -26,10 +27,10 @@ public class ServiceOrderPutServiceRestController {
         this.responseMapping = responseMapping;
     }
 
-    @PutMapping
-    public ResponseEntity<ServiceOrderPutServiceResponseBody> response(@PathVariable String serviceOrderId,
-                                                                       @PathVariable String serviceId,
-                                                                       @RequestBody ServiceOrderPutServiceRequestBody requestBody) {
+    @Override
+    public ResponseEntity<ServiceOrderPutServiceResponseBody> response(String serviceOrderId,
+                                                                       String serviceId,
+                                                                       ServiceOrderPutServiceRequestBody requestBody) {
         ServiceOrderPutServiceCommand command = requestMapping.command(new ServiceOrderPublicId(serviceOrderId),
                 new ServicePublicId(serviceId), requestBody);
         ServiceOrder serviceOrder = useCase.udpatedServiceOrder(command);

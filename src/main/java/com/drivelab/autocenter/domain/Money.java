@@ -1,5 +1,7 @@
 package com.drivelab.autocenter.domain;
 
+import org.springframework.lang.NonNull;
+
 import java.text.NumberFormat;
 import java.util.Locale;
 import java.util.Objects;
@@ -24,7 +26,7 @@ public class Money {
         this.amount = toCents(amount);
     }
 
-    public static Money create(double amount) {
+    public static Money create(@NonNull double amount) {
         return new Money(amount);
     }
 
